@@ -5,6 +5,12 @@ set rnu
 " Helps force plug-ins to load correctly when it is turned back on below.
 filetype off
 
+" Setting termguicolors on
+set termguicolors
+
+" Turn on mouse
+set mouse=a
+
 " Turn on syntax highlighting.
 syntax on
 
@@ -13,6 +19,9 @@ filetype plugin indent on
 
 " Turn off modelines
 set modelines=0
+
+"Clipboard
+set clipboard=unnamedplus
 
 " Automatically wrap text that extends beyond the screen length.
 set wrap
@@ -72,9 +81,15 @@ set viminfo='100,<9999,s100
 let mapleader = ","
 noremap <leader>w :w<cr>
 noremap <leader>gs :CocSearch
-noremap <leader>fs :Files<cr>
+noremap <leader>fs :CocCommand explorer<CR>
 noremap <leader><cr> <cr><c-w>h:q<cr>
 noremap <leader>bf :Buffer<cr>
+
+" Use ctrl-[hjkl] to select the active split!
+nmap <silent> <c-k> :wincmd k<CR>
+nmap <silent> <c-j> :wincmd j<CR>
+nmap <silent> <c-h> :wincmd h<CR>
+nmap <silent> <c-l> :wincmd l<CR>
 
 " Plugins
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -83,12 +98,28 @@ if empty(glob('~/.vim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-python/python-syntax'
-Plug 'neoclide/coc.nvim' , { 'branch' : 'release' }
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'vim-python/python-syntax'
+  Plug 'neoclide/coc.nvim' , { 'branch' : 'release' }
+  Plug 'ryanoasis/vim-devicons'
+  Plug 'rafi/awesome-vim-colorschemes'
+  Plug 'godlygeek/tabular'
+  Plug 'plasticboy/vim-markdown'
+  Plug 'iamcco/markdown-preview.nvim'
+  Plug 'norcalli/nvim-colorizer.lua'
+  Plug 'jiangmiao/auto-pairs'
+  Plug 'machakann/vim-sandwich'
+  Plug 'kristijanhusak/vim-carbon-now-sh'
 call plug#end()
+
+" Changing colorscheme
+colorscheme tender 
+
+" Adding Colorizer
+lua require'colorizer'.setup()
 
 let g:python_highlight_all = 2
 set laststatus=2
@@ -99,6 +130,10 @@ nmap <silent> gr <Plug>(coc-references)
 imap ii <Esc>
 
 " VIM AIRLINE
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+
+" Airline 
 let g:airline_powerline_fonts = 1
 
 if !exists('g:airline_symbols')
@@ -127,3 +162,25 @@ let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
+
+" Go to tab by number
+noremap <leader>1 1gt
+noremap <leader>2 2gt
+noremap <leader>3 3gt
+noremap <leader>4 4gt
+noremap <leader>5 5gt
+noremap <leader>6 6gt
+noremap <leader>7 7gt
+noremap <leader>8 8gt
+noremap <leader>9 9gt
+noremap <leader>0 :tablast<cr>
+
+" CARBON NOW SH
+vnoremap <F5> :CarbonNowSh<cr>
+
+" Non-transparent background
+highlight Normal ctermbg=none
+highlight Nontext ctermbg=none
+
+" Setup Prettier
+command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
